@@ -4,6 +4,8 @@
 *.obj
 *.elf
 
+*.dSYM/
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -27,3 +29,6 @@
 *.i*86
 *.x86_64
 *.hex
+
+# Miscellaneous
+.DS_Store
