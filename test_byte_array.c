@@ -274,3 +274,25 @@ void test_ByteBuffer_AppendDummyData_should_append_dummy_data_to_buffer(void)
     TEST_ASSERT_EQUAL(3, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expectedData, buffer.array.data, 3);
 }
+
+//======= TEST SUITE RUNNER =====
+int main(void)
+{
+  UnityBegin("test_byte_array.c");
+  RUN_TEST(test_BYTE_ARRAY_NONE_should_reflect_an_empty_array_with_non_allocated_data, 6);
+  RUN_TEST(test_ByteArray_Create_should_create_a_byte_array, 14);
+  RUN_TEST(test_ByteArray_CreateWithCString_should_create_ByteArray_using_C_string, 26);
+  RUN_TEST(test_ByteArray_FillWithDummyData_should_fill_an_array_with_dummy_data, 39);
+  RUN_TEST(test_ByteArray_GetSlice_should_return_a_subarray_of_the_ByteArray, 52);
+  RUN_TEST(test_ByteBuffer_Create_should_create_ByteBuffer_with_specified_array_and_max_length_and_used_bytes, 87);
+  RUN_TEST(test_ByteBuffer_CreateWithArray_should_create_an_empty_ByteBuffer_with_specified_ByteArray, 100);
+  RUN_TEST(test_ByteBuffer_BytesRemaining_should_return_lenth_of_unconsumed_bytes, 116);
+  RUN_TEST(test_ByteBuffer_Reset_should_reset_bytes_used, 133);
+  RUN_TEST(test_ByteBuffer_Consume, 140);
+  RUN_TEST(test_ByteBuffer_Append_should_append_bytes_to_the_buffer, 184);
+  RUN_TEST(test_ByteBuffer_AppendArray_should_append_an_array_to_the_buffer, 208);
+  RUN_TEST(test_ByteBuffer_AppendCString_should_append_a_C_string, 235);
+  RUN_TEST(test_ByteBuffer_AppendDummyData_should_append_dummy_data_to_buffer, 255);
+
+  return (UnityEnd());
+}

@@ -30,5 +30,8 @@
 *.x86_64
 *.hex
 
+# Test Suites
+test_byte_array
+
 # Miscellaneous
 .DS_Store
