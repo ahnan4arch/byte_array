@@ -1,18 +1,12 @@
 PROJECT = byte_array
-
 OPTIMIZE = -O3
-
 WARN = -Wall -Wextra -pedantic
-
 # Necessary to ensure C99 support w/array initialization is enabled
 CDEFS += -D_POSIX_C_SOURCE=1 -D_C99_SOURCE
-
 CFLAGS += -std=c99 -g ${WARN} ${CDEFS} ${OPTIMIZE}
-
 CFLAGS_TEST = ${CFLAGS} -DTEST
 # Need to update to append this option ONLY on 64-bit OS!
 CFLAGS_TEST += -DUNITY_SUPPORT_64
-
 TEST_EXECUTABLE = test_$(PROJECT)
 ifeq ($(OS),Windows_NT)
 	TEST_EXECUTABLE += .exe
@@ -27,26 +21,49 @@ endif
 # 		$(echo 'Building/testing in 32-bit mode')
 # 	endif
 
-default: all
+default: test lib${PROJECT}.a
 
-all: ${TEST_EXECUTABLE} lib${PROJECT}.a
+all: clean default
 
 OBJS = ${PROJECT}.o
 
-lib${PROJECT}.a: ${OBJS}
-	ar -rcs lib${PROJECT}.a ${OBJS}
+${PROJECT}.o: byte_array.c byte_array.h
+	@echo
+	@echo Building library source
+	@echo ----------------------------------------
+	${CC} -c -o $@ $< ${CFLAGS}
+	@echo
 
 unity.o: unity/unity.c unity/unity.h unity/unity_internals.h
+	@echo
+	@echo Building Unity test framework
+	@echo ----------------------------------------
 	${CC} -c -o $@ $< ${CFLAGS_TEST}
+	@echo
 
 ${TEST_EXECUTABLE}: test_${PROJECT}.c ${OBJS} unity.o
+	@echo Building tests
+	@echo ----------------------------------------
 	${CC} -o $@ $< ${OBJS} unity.o ${CFLAGS_TEST} -I./unity
+	@echo
 
 test: ${TEST_EXECUTABLE}
-	./${TEST_EXECUTABLE}
+	@echo
+	@echo Testing $(PROJECT)
+	@echo ----------------------------------------; ./${TEST_EXECUTABLE}
+
+lib${PROJECT}.a: ${OBJS}
+	@echo
+	@echo Building static library
+	@echo ----------------------------------------
+	ar -rcs $@ ${OBJS}
+	@echo $@ built successfully!
+	@echo
 
 clean:
-	rm -f ${PROJECT} test_${PROJECT} *.o *.a *.core
+	rm -rf ${PROJECT} test_${PROJECT} *.o *.a *.core *.dSYM/
+	@echo
 
 ${PROJECT}.o: ${PROJECT}.h
+
 test_${PROJECT}.o: ${PROJECT}.o
