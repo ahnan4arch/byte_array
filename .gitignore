@@ -32,6 +32,8 @@
 
 # Test Suites
 test_byte_array
+test_*_runner.*
 
 # Miscellaneous
 .DS_Store
+*.sublime-*

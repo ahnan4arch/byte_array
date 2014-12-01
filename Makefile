@@ -25,7 +25,7 @@ default: test lib${PROJECT}.a
 
 all: clean default
 
-OBJS = ${PROJECT}.o
+OBJS = ${PROJECT}.o test_${PROJECT}_runner.o
 
 ${PROJECT}.o: byte_array.c byte_array.h
 	@echo
@@ -41,11 +41,17 @@ unity.o: unity/unity.c unity/unity.h unity/unity_internals.h
 	${CC} -c -o $@ $< ${CFLAGS_TEST}
 	@echo
 
-${TEST_EXECUTABLE}: test_${PROJECT}.c ${OBJS} unity.o
+${TEST_EXECUTABLE}: test_${PROJECT}.c test_${PROJECT}_runner.o ${OBJS} unity.o
 	@echo Building tests
 	@echo ----------------------------------------
 	${CC} -o $@ $< ${OBJS} unity.o ${CFLAGS_TEST} -I./unity
 	@echo
+
+test_${PROJECT}_runner.o: test_${PROJECT}.c
+	@echo Creating test runner for $<
+	@echo ----------------------------------------
+	./generate_test_runner.sh $< > test_${PROJECT}_runner.c
+	${CC} -o $@ -c test_${PROJECT}_runner.c ${CFLAGS_TEST} -I./unity
 
 test: ${TEST_EXECUTABLE}
 	@echo
@@ -61,7 +67,7 @@ lib${PROJECT}.a: ${OBJS}
 	@echo
 
 clean:
-	rm -rf ${PROJECT} test_${PROJECT} *.o *.a *.core *.dSYM/
+	rm -rf ${PROJECT} test_${PROJECT} *.o *.a *.core *.dSYM/ test_*_runner.c
 	@echo
 
 ${PROJECT}.o: ${PROJECT}.h
