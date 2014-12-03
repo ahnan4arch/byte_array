@@ -205,7 +205,6 @@ ByteBuffer ByteBuffer_CreateAndAppendFormattedCString(void* data, size_t max_len
     return buf;
 }
 
-
 ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)
 {
     assert(buffer != NULL);
@@ -218,4 +217,9 @@ ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)
     }
     buffer->bytesUsed += len;
     return buffer;
+}
+
+bool ByteBuffer_IsNull(ByteBuffer const buffer)
+{
+    return buffer.array.data == NULL;
 }
